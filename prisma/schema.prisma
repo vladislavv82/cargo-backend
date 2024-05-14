@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email    String  @unique
+  name     String?
+  password String
+
+  drivers   Driver[] //✅
+  transport Transport[] //✅
+
+  @@map("user")
+}
+
+model Driver {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  fullName       String  @map("full_name")
+  licenseNumber  String  @unique @map("license_number")
+  passportNumber String  @unique @map("passport_number")
+  phoneNumber    String? @unique @map("phone_number")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  trips     Trip[]
+  transport Transport[]
+  expense   Expense[]
+
+  @@map("drivers")
+}
+
+model Transport {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  type                TypeTransport?
+  startPeriodRoadPass DateTime?      @map("start_periodroad_pass")
+  endPeriodRoadPass   DateTime?      @map("end_periodroad_pass")
+  registrationNumber  String         @unique @map("registration_number")
+  transportModel      String         @map("transport_model")
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  Driver   Driver? @relation(fields: [driverId], references: [id])
+  driverId String?
+
+  @@map("transport")
+}
+
+model Trip {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  route         String
+  loadingDate   DateTime  @map("loading_date")
+  unloadingDate DateTime? @map("unloading_date")
+  tripAmount    Float     @map("trip_amount")
+  status        Status?
+
+  Driver   Driver? @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  driverId String?
+
+  @@map("trips")
+}
+
+model Expense {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  amountConsumption Float   @map("amount_consumption") // Сумма расхода
+  Driver            Driver? @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  driverId          String?
+
+  @@map("expense")
+}
+
+enum TypeTransport {
+  truck
+  trailer
+}
+
+enum Status {
+  processing
+  completed
+  paid
+}
