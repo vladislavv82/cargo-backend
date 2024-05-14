@@ -87,7 +87,7 @@ model Expense {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  amountConsumption Float   @map("amount_consumption") // Сумма расхода
+  amountConsumption Float   @map("amount_consumption") 
   Driver            Driver? @relation(fields: [driverId], references: [id], onDelete: Cascade)
   driverId          String?
 

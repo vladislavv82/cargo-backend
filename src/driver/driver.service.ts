@@ -39,6 +39,9 @@ export class DriverService {
 			const drivers = await this.prisma.driver.findMany({
 				where: {
 					userId
+				},
+				include: {
+					transport: true
 				}
 			})
 

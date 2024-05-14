@@ -31,7 +31,11 @@ export class TripService {
 
 	async getAllTrips() {
 		try {
-			const trips = await this.prisma.trip.findMany()
+			const trips = await this.prisma.trip.findMany({
+				include: {
+					Driver: true
+				}
+			})
 
 			if (trips.length === 0) {
 				throw new HttpException('Поездки не найдены', HttpStatus.NOT_FOUND)
