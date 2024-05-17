@@ -14,9 +14,8 @@ export class AnalyticsService {
 	private calculateProfit(tripAmount: number, expenseSum: number): number {
 		return tripAmount - expenseSum
 	}
-    
+
 	async getGeneralStatistics() {
-		const todayStart = startOfDay(new Date())
 		const monthStart = startOfDay(subDays(new Date(), 31))
 
 		const tripsTotal = await this.prisma.trip.count({
@@ -65,12 +64,11 @@ export class AnalyticsService {
 	}
 
 	async getDriverStatistics(driverId: string) {
-		const todayStart = startOfDay(new Date())
 		const monthStart = startOfDay(subDays(new Date(), 31))
 
 		const tripsTotal = await this.prisma.trip.count({
 			where: {
-				id: driverId,
+				driverId: driverId,
 				createdAt: {
 					gte: monthStart.toISOString()
 				}
@@ -79,7 +77,7 @@ export class AnalyticsService {
 
 		const expenseSum = await this.prisma.expense.aggregate({
 			where: {
-				id: driverId,
+				driverId: driverId,
 				createdAt: {
 					gte: monthStart.toISOString()
 				}
@@ -91,7 +89,7 @@ export class AnalyticsService {
 
 		const tripAmountSum = await this.prisma.trip.aggregate({
 			where: {
-				id: driverId,
+				driverId: driverId,
 				createdAt: {
 					gte: monthStart.toISOString()
 				}
@@ -108,10 +106,10 @@ export class AnalyticsService {
 
 		return {
 			statistics: [
-				{ label: 'trips total', value: tripsTotal },
-				{ label: 'expense sum', value: expenseSum._sum.amountConsumption },
-				{ label: 'trip amount sum', value: tripAmountSum._sum.tripAmount },
-				{ label: 'profit', value: profit }
+				{ label: 'Количество перевозок', value: tripsTotal },
+				{ label: 'Доход', value: tripAmountSum._sum.tripAmount },
+				{ label: 'Прибыль', value: profit },
+				{ label: 'Расходы', value: expenseSum._sum.amountConsumption }
 			]
 		}
 	}
