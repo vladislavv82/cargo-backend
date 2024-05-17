@@ -55,10 +55,10 @@ export class AnalyticsService {
 
 		return {
 			statistics: [
-				{ label: 'trips total', value: tripsTotal },
-				{ label: 'expense sum', value: expenseSum._sum.amountConsumption },
-				{ label: 'trip amount sum', value: tripAmountSum._sum.tripAmount },
-				{ label: 'profit', value: profit }
+				{ label: 'Количество перевозок', value: tripsTotal },
+				{ label: 'Доход', value: tripAmountSum._sum.tripAmount },
+				{ label: 'Прибыль', value: profit },
+				{ label: 'Расходы', value: expenseSum._sum.amountConsumption }
 			]
 		}
 	}
