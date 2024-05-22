@@ -25,7 +25,7 @@ export class TransportController {
 	@HttpCode(200)
 	@Post()
 	@Auth()
-	create(
+	createTransport(
 		@Body() createTransportDto: CreateTransportDto,
 		@CurrentUser('id') userId: string
 	) {
@@ -34,14 +34,20 @@ export class TransportController {
 
 	@Get()
 	@Auth()
-	async getAll(@CurrentUser('id') userId: string) {
+	async getAllTransport(@CurrentUser('id') userId: string) {
 		return this.transportService.getAll(userId)
+	}
+
+	@Get('/liberty')
+	@Auth()
+	async getLibertyTransport(@CurrentUser('id') userId: string) {
+		return this.transportService.getLibertyTransport(userId)
 	}
 
 	@HttpCode(200)
 	@Get(':id')
 	@Auth()
-	async findOne(@Param('id') id: string) {
+	async findOneTransport(@Param('id') id: string) {
 		return this.transportService.findOne(id)
 	}
 
@@ -49,18 +55,17 @@ export class TransportController {
 	@HttpCode(200)
 	@Put(':id')
 	@Auth()
-	async update(
+	async updateTransport(
 		@Body() dto: UpdateTransportDto,
-		@CurrentUser('id') userId: string,
 		@Param('id') id: string
 	) {
-		return this.transportService.update(dto, id, userId)
+		return this.transportService.update(dto, id)
 	}
 
 	@HttpCode(200)
 	@Delete(':id')
 	@Auth()
-	async delete(@Param('id') id: string) {
+	async deleteTransport(@Param('id') id: string) {
 		return this.transportService.delete(id)
 	}
 }

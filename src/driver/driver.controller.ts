@@ -36,7 +36,7 @@ export class DriversController {
 	@Put(':id')
 	@Auth()
 	async updateDriver(
-		@Body() dto: CreateDriverDto,
+		@Body() dto: UpdateDriverDto,
 		@CurrentUser('id') userId: string,
 		@Param('id') id: string
 	) {

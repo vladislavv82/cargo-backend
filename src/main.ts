@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 4200;
@@ -23,6 +24,10 @@ async function bootstrap() {
     credentials: true,
     exposedHeaders: 'set-cookie',
   });
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }));
 
   await app.listen(PORT, () => console.log(`Server started on port ${PORT} 🚀`))
 }

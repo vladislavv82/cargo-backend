@@ -1,19 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTransportDto } from './create-transport.dto';
-import { IsEnum, IsOptional, IsString, IsDateString  } from 'class-validator'
-import { Transform } from 'class-transformer'
-import { TypeTransport } from '@prisma/client';
+import { PartialType } from '@nestjs/mapped-types'
+import { CreateTransportDto } from './create-transport.dto'
+import { IsOptional, IsString, IsDateString } from 'class-validator'
 
-export class UpdateTransportDto extends PartialType(CreateTransportDto) {
-
+export class UpdateTransportDto {
+	@IsDateString()
     @IsOptional()
-    @IsDateString()
-    startPeriodRoadPass?: Date;
-  
-    @IsOptional()
-    @IsDateString()
-    endPeriodRoadPass?: Date;
+	startPeriodRoadPass?: Date
 
-    @IsString()
-    driverId: string;
+	@IsDateString()
+    @IsOptional()
+	endPeriodRoadPass?: Date
+
+	@IsString()
+	driverId: string
 }
